@@ -9,18 +9,23 @@ if __name__ == "__main__":
     """
 
     print("Staring test analysis...")
-    datasets = OrderedDict([('Data', 'data.root'),
-                                ('QCD', 'qcd.root'),
-                                ('Diboson', 'diboson.root'),
-                                ('DY+jets', 'dy.root'),
-                                ('single top', 'single_top.root'),
-                                ('TTbar', 'ttbar.root'),
-                                ('W+jets', 'wjets.root'), ])
+    datasets = OrderedDict(
+        [
+            ('Data', 'data.root'),
+            ('QCD', 'qcd.root'),
+            ('Diboson', 'diboson.root'),
+            ('DY+jets', 'dy.root'),
+            ('single top', 'single_top.root'),
+            ('TTbar', 'ttbar.root'),
+            ('W+jets', 'wjets.root'),
+        ]
+    )
 
     event_options = {'JEC': 'nominal',
                      'muon_isolation': 0.1,
-                     'max_events':10
+                     'max_events': 10
                      }
+
     analyzers = OrderedDict()
     for name, file_name in datasets.items():
         analyzer = TTbarAnalyzer(name, file_name, event_options)

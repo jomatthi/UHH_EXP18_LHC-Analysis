@@ -1,5 +1,6 @@
 from uhhObjects import *
 
+
 class Event(object):
     """
     A collision event. Holding all important physics object required for the LHC analysis.
@@ -18,7 +19,7 @@ class Event(object):
         returns number of jets.
         """
         return len(self.jets)
-    
+
     def n_muons(self):
         """
         returns number of muons.

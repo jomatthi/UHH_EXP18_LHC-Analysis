@@ -1,5 +1,6 @@
 import math
 
+
 class FourMomentum(object):
     """
     Four-momentum of a particle in the form of (px, py, pz, E)

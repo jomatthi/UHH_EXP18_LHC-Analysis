@@ -1,5 +1,5 @@
-import ROOT
 from collections import OrderedDict
+
 
 class Histograms(object):
     """
@@ -30,5 +30,3 @@ class Histograms(object):
         Has to be implemented by actual implemenation of Histograms.
         """
         raise NotImplementedError()
-    
-    

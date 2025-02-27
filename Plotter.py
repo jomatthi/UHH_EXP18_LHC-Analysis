@@ -1,21 +1,20 @@
-import sys,os
+import os
 import ROOT
 ROOT.gROOT.SetBatch(True)
 ROOT.gErrorIgnoreLevel = 2002
-from collections import OrderedDict, defaultdict
+
 
 class Plotter(object):
     """
     A plotter to produce .pdf files from the histograms stored in the output.root files.
     """
 
-
     def __init__(self, analyzers):
         # set default plotting style
         self.style = default_style()
         self.style.SetOptLogy(True)
         ROOT.gROOT.SetStyle("MyStyle");
-        self.colors = {'TTbar':632, 'single top':798, 'W+jets':602, 'QCD':867, 'DY+jets':829, 'Diboson':875}
+        self.colors = {'TTbar': 632, 'single top': 798, 'W+jets': 602, 'QCD': 867, 'DY+jets': 829, 'Diboson': 875}
         self.hists_data = []
         self.hists_stack = []
         self.hists_err = []
@@ -32,8 +31,8 @@ class Plotter(object):
                         if process in self.colors.keys():
                             hist.SetFillColor(self.colors[process])
                         if i >= len(self.hists_stack):
-                            self.hists_stack.append(ROOT.THStack(hist.GetName()+"_stack", hist.GetTitle()))
-                            self.hists_err.append(hist.Clone(hist.GetName()+"_err"))
+                            self.hists_stack.append(ROOT.THStack(hist.GetName() + "_stack", hist.GetTitle()))
+                            self.hists_err.append(hist.Clone(hist.GetName() + "_err"))
                             self.hists_err[i].SetTitle("stat. Uncert.")
                             self.hists_err[i].Reset()
                             self.hists_err[i].SetFillColor(923)
@@ -52,10 +51,10 @@ class Plotter(object):
 # self.histograms = {d:{{process:hist} for process in analyzers.keys()] for d in dirs}
 
     def process(self):
-        s=""
-        for i in range(0,len(self.hists_stack)):
+        s = ""
+        for i in range(0, len(self.hists_stack)):
             h = self.hists_stack[i]
-            c = ROOT.TCanvas("c","c",800,600)
+            c = ROOT.TCanvas("c", "c", 800, 600)
             if h.GetMaximum() <= 0: h.SetMaximum(1)
             h.SetMinimum(0.8)
             h.Draw("hist")
@@ -66,34 +65,35 @@ class Plotter(object):
             c.Modified()
             self.hists_err[i].Draw("E2SAME")
             c.Modified()
-            c.BuildLegend(0.76,0.4,0.95,0.95,"");
+            c.BuildLegend(0.76, 0.4, 0.95, 0.95, "");
             c.Print("plots/"+"_".join(h.GetName().split("_")[1:])+"_MC.pdf")
             if len(self.hists_data) > 0:
                 self.hists_data[i].Draw("PESAME")
-                c.BuildLegend(0.75,0.35,0.95,0.95,"");
+                c.BuildLegend(0.75, 0.35, 0.95, 0.95, "");
                 c.Print("plots/"+"_".join(h.GetName().split("_")[1:])+".pdf")
 
             old_s = s
             s = "_".join(h.GetName().split("_")[1:])
             s = "".join(s.split("_default")[0:1])+".pdf"
-            if(s != old_s):
-                if(i == len(self.hists_stack) - 1):
+            if (s != old_s):
+                if (i == len(self.hists_stack) - 1):
                     c.Print(s)
                 else:
                     c.Print(s+"(")
-                if(old_s != ""):
+                if (old_s != ""):
                     c.Print(old_s+"]")
-            elif(i == len(self.hists_stack) - 1):
+            elif (i == len(self.hists_stack) - 1):
                 c.Print(s+")")
             else:
                 c.Print(s)
             del c
 
+
 def default_style():
     """
     default plotting style based on old LHCTop code.
     """
-    MyStyle = ROOT.TStyle("MyStyle","My Root Style");
+    MyStyle = ROOT.TStyle("MyStyle", "My Root Style");
     MyStyle.SetStatColor(0);
     MyStyle.SetCanvasColor(0);
     MyStyle.SetPadColor(0);
@@ -119,7 +119,7 @@ def default_style():
     MyStyle.SetMarkerSize(0.8);
     MyStyle.SetTickLength(0.03);
     MyStyle.SetTitleOffset(1.5, "x");
-    #modified
+    # modified
     MyStyle.SetTitleOffset(2.0, "y");
     #
     MyStyle.SetTitleOffset(1.0, "z");
@@ -132,6 +132,5 @@ def default_style():
     MyStyle.SetTitleSize(0.05, "x");
     MyStyle.SetTitleSize(0.05, "y");
     MyStyle.SetTitleSize(0.05, "z");
-    MyStyle.SetTickLength(0.02,"x");
+    MyStyle.SetTickLength(0.02, "x");
     return MyStyle
-

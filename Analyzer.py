@@ -1,7 +1,7 @@
 import ROOT
 from EventBuilder import EventBuilder
-from Event import Event
 from collections import OrderedDict
+
 
 class Analyzer(object):
     """
@@ -17,7 +17,6 @@ class Analyzer(object):
         self.max_events = -1
         if "max_events" in event_options:
             self.max_events = event_options["max_events"]
-
 
     def attach_histogram(self, histogram, name):
         """
