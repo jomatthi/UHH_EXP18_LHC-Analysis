@@ -8,8 +8,9 @@ if __name__ == "__main__":
     Main analysis script. Here you run the analysis and evaluate the results.
     """
 
-    # run_all = True  # to run both data and Monte Carlo simulation.
-    run_all = False  # to only run the Monte Carlo simulation. Use this as you default for the design and optimization of the analysis.
+    # Choose run mode:
+    run_all = False  # only run the Monte Carlo simulation. Use this as you default for the design and optimization of the analysis.
+    # run_all = True  # run both Data and Monte Carlo simulation.
 
     # List of datasets to be analyzed
     if run_all:
@@ -37,9 +38,10 @@ if __name__ == "__main__":
         )
 
     # Options for the event builder
-    event_options = {'JEC': 'nominal',  # Jet Energy corrections: change to "up" or "down" to evaluate the systematic uncertainties
-                     'muon_isolation': 0.1  # muon isolation, you can leave this at the default value
-                     }
+    event_options = {
+        'JEC': 'nominal',  # Jet Energy corrections: change to "up" or "down" to evaluate the systematic uncertainties
+        'muon_isolation': 0.1  # muon isolation, you can leave this at the default value
+        }
 
     analyzers = OrderedDict()
 
@@ -50,14 +52,25 @@ if __name__ == "__main__":
         analyzers[name] = analyzer  # store the results
 
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Exercise 1: Properties of ttbar quark events
     # Exercise 2: Measurement of the ttbar production cross section
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     # You can access variables from TTbarAnalyzer like this:
-    n_ttbar = analyzers['TTbar'].n_total  # get total number of ttbar events
-    print("Total Number of ttbar events: {0}".format(n_ttbar))  # write to the console
-    n_background_total = sum([an.n_total for key, an in analyzers.items() if not (key == 'Data' or key == 'TTbar')])  # Sum total number of all events, except data and ttbar
-    print("Total Number of background events: {0}".format(n_background_total))
+    # total number of events in the TTbar sample
+    n_ttbar_total = analyzers['TTbar'].n_total
+
+    # total number of events in the background samples
+    n_background_total = sum(
+        [
+            an.n_total for key, an in analyzers.items() if not (key == 'Data' or key == 'TTbar')
+        ]
+    )  # Sum total number of all events, except 'Data' and 'TTbar'
+
+    # print numbers in the terminal
+    print(f"Total Number of ttbar events: {n_ttbar_total}")
+    # you can also reduce the numbers of digits
+    print(f"Total Number of background events: {n_background_total:.4f}")
 
     # Plot all histograms filled in the Analysis
     plotter = Plotter(analyzers)
@@ -67,8 +80,6 @@ if __name__ == "__main__":
     # Exercise 3: Reconstruction of the top quark mass
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    # Run the fit of the top mass distribution
-    #fitter = Fitter(analyzers)
-    #fitter.fit(130., 210.)
-    # fitter.fit(x,y)
-    # (x,y) = fit range
+    # Uncomment to fit the top mass distribution
+    # fitter = Fitter(analyzers)
+    # fitter.fit(130., 210.)  # fitter.fit(x,y) with (x,y) fit range

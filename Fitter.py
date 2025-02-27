@@ -34,7 +34,7 @@ class Fitter(object):
             print(output)
             output = 'With ' + str(self.top_hist.GetEntries()) + ' top quark candidates'
             print(output)
-            c.SaveAs("plots/ReconstructedTopMass.pdf")
+            c.SaveAs("ReconstructedTopMass.pdf")
             del c
 
         c = ROOT.TCanvas()
@@ -48,6 +48,6 @@ class Fitter(object):
         print(output)
         output = 'With ' + str(self.top_hist_MC.GetEntries()) + ' top quark candidates\n'
         print(output)
-        c.SaveAs("plots/ReconstructedTopMass_MC.pdf")
+        c.SaveAs("ReconstructedTopMass_MC.pdf")
         del c
         return self.top_hist_MC

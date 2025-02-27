@@ -15,8 +15,7 @@ class FourMomentum(object):
         """
         implementation for adding two four-vectors.
         """
-        # Exercise 1.1 Adding four-momenta:
-        # this part needs to be implemented
+        # The addition of two four-vectors needs to be implemented.
         pass
 
     def __mul__(self, other):
@@ -31,8 +30,7 @@ class FourMomentum(object):
             # scalar product of two four-vectors
             result = 0.0
 
-            # Exercise 1.2 invariant mass:
-            # this part needs to be implemented
+            # The multiplication of two four-vectors (aka invariant mass) needs to be implemented.
             return result
 
         # check if is multiplied with number
