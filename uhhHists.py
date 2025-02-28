@@ -10,29 +10,29 @@ class DefaultHistograms(Histograms):
     def __init__(self, name):
         self.hists = OrderedDict(
             [
-                ('muons_number', TH1F('muons_number', 'N_{#mu}', 11, -0.5, 10.5)),
-                ('muon1_pt',     TH1F('muon1_pt', 'p_{T,#mu} [GeV]', 60, 0, 300)),
-                ('muon1_eta',    TH1F('muon1_eta', '#eta_{#mu}', 50, -5.0, 5.0)),
-                ('muon1_phi',    TH1F('muon1_phi', '#phi_{#mu}', 40, -3.2, 3.2)),
-                ('jets_number',  TH1F('jets_number', 'N_{jets}', 11, -0.5, 10.5)),
-                ('jet1_pt',      TH1F('jet1_pt', 'p_{T,jet} [GeV]', 60, 0, 300)),
-                ('jet1_eta',     TH1F('jet1_eta', '#eta_{jet}', 50, -5.0, 5.0)),
-                ('jet1_phi',     TH1F('jet1_phi', '#phi_{jet}', 40, -3.2, 3.2)),
-                ('jet2_pt',      TH1F('jet2_pt', 'p_{T,jet} [GeV]', 60, 0, 300)),
-                ('jet2_eta',     TH1F('jet2_eta', '#eta_{jet}', 50, -5.0, 5.0)),
-                ('jet2_phi',     TH1F('jet2_phi', '#phi_{jet}', 40, -3.2, 3.2)),
-                ('jet3_pt',      TH1F('jet3_pt', 'p_{T,jet} [GeV]', 60, 0, 300)),
-                ('jet3_eta',     TH1F('jet3_eta', '#eta_{jet}', 50, -5.0, 5.0)),
-                ('jet3_phi',     TH1F('jet3_phi', '#phi_{jet}', 40, -3.2, 3.2)),
-                ('met_pt',       TH1F('met_pt', 'p_{T,miss}', 60, 0, 300)),
-                ('met_phi',      TH1F('met_phi', '#phi_{MET}', 40, -3.2, 3.2)),
-                ('bjets_number', TH1F('bjets_number', 'N_{b-jets}', 11, -0.5, 10.5)),
-                ('bjet1_pt',     TH1F('bjet1_pt', 'p_{T,b-jet} [GeV]', 60, 0, 300)),
-                ('bjet1_eta',    TH1F('bjet1_eta', '#eta_{b-jet}', 50, -5.0, 5.0)),
-                ('bjet1_phi',    TH1F('bjet1_phi', '#phi_{b-jet}', 40, -3.2, 3.2)),
-                ('bjet2_pt',     TH1F('bjet2_pt', 'p_{T,b-jet} [GeV]', 60, 0, 300)),
-                ('bjet2_eta',    TH1F('bjet2_eta', '#eta_{b-jet}', 50, -5.0, 5.0)),
-                ('bjet2_phi',    TH1F('bjet2_phi', '#phi_{b-jet}', 40, -3.2, 3.2)),
+                ('muons_number', TH1F('muons_number', 'N_{#mu}', 11, -0.5, 10.5)),  # noqa
+                ('muon1_pt',     TH1F('muon1_pt', 'p_{T,#mu} [GeV]', 60, 0, 300)),  # noqa
+                ('muon1_eta',    TH1F('muon1_eta', '#eta_{#mu}', 50, -5.0, 5.0)),  # noqa
+                ('muon1_phi',    TH1F('muon1_phi', '#phi_{#mu}', 40, -3.2, 3.2)),  # noqa
+                ('jets_number',  TH1F('jets_number', 'N_{jets}', 11, -0.5, 10.5)),  # noqa
+                ('jet1_pt',      TH1F('jet1_pt', 'p_{T,jet} [GeV]', 60, 0, 300)),  # noqa
+                ('jet1_eta',     TH1F('jet1_eta', '#eta_{jet}', 50, -5.0, 5.0)),  # noqa
+                ('jet1_phi',     TH1F('jet1_phi', '#phi_{jet}', 40, -3.2, 3.2)),  # noqa
+                ('jet2_pt',      TH1F('jet2_pt', 'p_{T,jet} [GeV]', 60, 0, 300)),  # noqa
+                ('jet2_eta',     TH1F('jet2_eta', '#eta_{jet}', 50, -5.0, 5.0)),  # noqa
+                ('jet2_phi',     TH1F('jet2_phi', '#phi_{jet}', 40, -3.2, 3.2)),  # noqa
+                ('jet3_pt',      TH1F('jet3_pt', 'p_{T,jet} [GeV]', 60, 0, 300)),  # noqa
+                ('jet3_eta',     TH1F('jet3_eta', '#eta_{jet}', 50, -5.0, 5.0)),  # noqa
+                ('jet3_phi',     TH1F('jet3_phi', '#phi_{jet}', 40, -3.2, 3.2)),  # noqa
+                ('met_pt',       TH1F('met_pt', 'p_{T,miss}', 60, 0, 300)),  # noqa
+                ('met_phi',      TH1F('met_phi', '#phi_{MET}', 40, -3.2, 3.2)),  # noqa
+                ('bjets_number', TH1F('bjets_number', 'N_{b-jets}', 11, -0.5, 10.5)),  # noqa
+                ('bjet1_pt',     TH1F('bjet1_pt', 'p_{T,b-jet} [GeV]', 60, 0, 300)),  # noqa
+                ('bjet1_eta',    TH1F('bjet1_eta', '#eta_{b-jet}', 50, -5.0, 5.0)),  # noqa
+                ('bjet1_phi',    TH1F('bjet1_phi', '#phi_{b-jet}', 40, -3.2, 3.2)),  # noqa
+                ('bjet2_pt',     TH1F('bjet2_pt', 'p_{T,b-jet} [GeV]', 60, 0, 300)),  # noqa
+                ('bjet2_eta',    TH1F('bjet2_eta', '#eta_{b-jet}', 50, -5.0, 5.0)),  # noqa
+                ('bjet2_phi',    TH1F('bjet2_phi', '#phi_{b-jet}', 40, -3.2, 3.2)),  # noqa
             ]
         )
         # DO NOT TOUCH THIS PART

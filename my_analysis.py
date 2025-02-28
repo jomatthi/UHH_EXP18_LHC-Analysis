@@ -8,8 +8,8 @@ if __name__ == "__main__":
     Main analysis script. Here you run the analysis and evaluate the results.
     """
 
-    # Choose run mode:
-    run_all = False  # only run the Monte Carlo simulation. Use this as you default for the design and optimization of the analysis.
+    # Choose run mode ('False' as default to design & optimize the analysis):
+    run_all = False  # only run the Monte Carlo simulation.
     # run_all = True  # run both Data and Monte Carlo simulation.
 
     # List of datasets to be analyzed
@@ -39,17 +39,22 @@ if __name__ == "__main__":
 
     # Options for the event builder
     event_options = {
-        'JEC': 'nominal',  # Jet Energy corrections: change to "up" or "down" to evaluate the systematic uncertainties
-        'muon_isolation': 0.1  # muon isolation, you can leave this at the default value
+        # Jet Energy corrections: "up" or "down" to evaluate the syst. error
+        'JEC': 'nominal',
+        # muon isolation, you can leave this at the default value
+        'muon_isolation': 0.1
         }
 
     analyzers = OrderedDict()
 
-    # Analyze all datasets:
+    # Analyze datasets:
     for name, file_name in datasets.items():
-        analyzer = TTbarAnalyzer(name, file_name, event_options)  # create an Analyzer for each dataset
-        analyzer.run()  # run the Analyzer
-        analyzers[name] = analyzer  # store the results
+        # create an Analyzer for each dataset
+        analyzer = TTbarAnalyzer(name, file_name, event_options)
+        # run the Analyzer
+        analyzer.run()
+        # store the results
+        analyzers[name] = analyzer
 
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # Exercise 1: Properties of ttbar quark events
@@ -63,14 +68,15 @@ if __name__ == "__main__":
     # total number of events in the background samples
     n_background_total = sum(
         [
-            an.n_total for key, an in analyzers.items() if not (key == 'Data' or key == 'TTbar')
+            # Sum total number of all events, except 'Data' and 'TTbar'
+            an.n_total for key, an in analyzers.items() if not (key == 'Data' or key == 'TTbar')  # noqa
         ]
-    )  # Sum total number of all events, except 'Data' and 'TTbar'
+    )
 
     # print numbers in the terminal
-    print(f"Total Number of ttbar events: {n_ttbar_total}")
+    print(f"Total number of ttbar events: {n_ttbar_total}")
     # you can also reduce the numbers of digits
-    print(f"Total Number of background events: {n_background_total:.4f}")
+    print(f"Total number of background events: {n_background_total:.4f}")
 
     # Plot all histograms filled in the Analysis
     plotter = Plotter(analyzers)

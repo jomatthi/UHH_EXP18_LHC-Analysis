@@ -22,21 +22,26 @@ class FourMomentum(object):
         """
         implementation of vector multiplication.
 
-        returns scalar if multiplication with other FourMomentum (aka scalar product)
+        returns scalar if multiplication with other FourMomentum, the
+            scalar product
         reutrns FourMomentum if multiplication with number
         """
         # check if is multiplied with four-vector
         if isinstance(other, FourMomentum):
-            # scalar product of two four-vectors
             result = 0.0
 
-            # The multiplication of two four-vectors (aka invariant mass) needs to be implemented.
+            # The multiplication of two four-vectors needs to be implemented.
             return result
 
         # check if is multiplied with number
-        elif isinstance(other, (int, float, complex)) and not isinstance(other, bool):
+        elif isinstance(other, (int, float, complex)) and not isinstance(other, bool):  # noqa
             # multiplication with a scalar
-            new_fourmomentum = FourMomentum(self.px*other, self.py*other, self.pz*other, self.E*other)
+            new_fourmomentum = FourMomentum(
+                self.px*other,
+                self.py*other,
+                self.pz*other,
+                self.E*other
+                )
             return new_fourmomentum
 
     # multiplication is commutative
@@ -46,19 +51,24 @@ class FourMomentum(object):
         """
         return transverse momentum
         """
-        return math.sqrt(self.px**2.0 + self.py**2.0)
+        result = math.sqrt(self.px**2.0 + self.py**2.0)
+        return result
 
     def eta(self):
         """
         return pseudorapidity
         """
-        return math.atanh(self.pz / math.sqrt(self.px**2 + self.py**2 + self.pz**2))
+        result = math.atanh(
+            self.pz / math.sqrt(self.px**2 + self.py**2 + self.pz**2)
+            )
+        return result
 
     def phi(self):
         """
         return azimuthal angle phi
         """
-        return math.atan2(self.py, self.px)
+        result = math.atan2(self.py, self.px)
+        return result
 
     def E(self):
         """
@@ -88,4 +98,4 @@ class FourMomentum(object):
         elif len(args) == 1:
             self.__init__(args[0].px, args[0].py, args[0].pz, args[0].E)
         else:
-            raise TypeError("set_v4() takes 1 or 4 arguments (%d given)" % len(args))
+            raise TypeError("set_v4() takes 1 or 4 arguments (%d given)" % len(args))  # noqa

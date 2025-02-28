@@ -1,9 +1,7 @@
-from uhhObjects import *
-
-
 class Event(object):
     """
-    A collision event. Holding all important physics object required for the LHC analysis.
+    A collision event. Holding all important physics object required
+    for the LHC analysis.
     """
     def __init__(self):
         self.muons = []

@@ -8,11 +8,11 @@ class Fitter(object):
         self.top_hist = 0
         for x in analyzers:
             if (x == 'Data'):
-                self.top_hist = analyzers[x].histograms['top_mass'].hists['top_mass']
+                self.top_hist = analyzers[x].histograms['top_mass'].hists['top_mass']  # noqa
             elif (self.top_hist_MC == 0):
-                self.top_hist_MC = analyzers[x].histograms['top_mass'].hists['top_mass']
+                self.top_hist_MC = analyzers[x].histograms['top_mass'].hists['top_mass']  # noqa
             else:
-                self.top_hist_MC.Add(analyzers[x].histograms['top_mass'].hists['top_mass'])
+                self.top_hist_MC.Add(analyzers[x].histograms['top_mass'].hists['top_mass'])  # noqa
         self.mean = 0.0
         self.unc = 0.0
 
@@ -29,11 +29,9 @@ class Fitter(object):
             fit = self.top_hist.GetFunction("gaus")
             self.mean = fit.GetParameter(1)
             self.unc = fit.GetParError(1)
-            print('\n\n\n----------------------------------------------------------')
-            output = 'Fitted top quark mass in data: ' + str(self.mean) + ' +- ' + str(self.unc) + ' GeV\n\n'
-            print(output)
-            output = 'With ' + str(self.top_hist.GetEntries()) + ' top quark candidates'
-            print(output)
+            print('\n\n------------------------------------------------------')
+            print(f'Fitted top quark mass in data: {str(self.mean)} +- {str(self.unc)} GeV\n')  # noqa
+            print(f'With {str(self.top_hist.GetEntries())} top quark candidates')  # noqa
             c.SaveAs("ReconstructedTopMass.pdf")
             del c
 
@@ -43,11 +41,9 @@ class Fitter(object):
         fit = self.top_hist_MC.GetFunction("gaus")
         self.mean = fit.GetParameter(1)
         self.unc = fit.GetParError(1)
-        print('\n\n\n----------------------------------------------------------')
-        output = 'Fitted top quark mass in Monte Carlo: ' + str(self.mean) + ' +- ' + str(self.unc) + ' GeV\n\n'
-        print(output)
-        output = 'With ' + str(self.top_hist_MC.GetEntries()) + ' top quark candidates\n'
-        print(output)
+        print('\n\n------------------------------------------------------')
+        print(f'Fitted top quark mass in Monte Carlo: {str(self.mean)} +- {str(self.unc)} GeV\n')  # noqa
+        print(f'With {str(self.top_hist_MC.GetEntries())} top quark candidates')  # noqa
         c.SaveAs("ReconstructedTopMass_MC.pdf")
         del c
         return self.top_hist_MC

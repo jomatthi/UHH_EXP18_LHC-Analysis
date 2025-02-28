@@ -8,7 +8,7 @@ class Analyzer(object):
     Base class for analyzing datasets using the FPraktikum framework.
     """
 
-    def __init__(self, dataset_name, file_name, event_options = {}):
+    def __init__(self, dataset_name, file_name, event_options={}):
         self.dataset_name = dataset_name
         self.file_name = file_name
         self.event_builder = EventBuilder(event_options)
@@ -43,14 +43,15 @@ class Analyzer(object):
         """
         Loop over all datasets and process each event.
         """
-        print("Start processing %s."% self.dataset_name)
+        print("Start processing %s." % self.dataset_name)
         f = ROOT.TFile.Open('files/'+self.file_name)
         n_event = 0
         for event_data in f.events:
             if self.max_events > 0 and n_event >= self.max_events:
                 continue
             n_event += 1
-            if n_event % 10000 == 0: print("%d events processed" % n_event)
+            if n_event % 10000 == 0:
+                print("%d events processed" % n_event)
             # build event from TTree
             event = self.event_builder.build_event(event_data)
             # process event

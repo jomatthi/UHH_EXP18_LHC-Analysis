@@ -1,14 +1,16 @@
 from FourMomentum import FourMomentum
-import math, functools, itertools
+import math
+import functools
+import itertools
 
 
 class TopReco:
 
     def __init__(self, hl_diff, n_jet_min, n_jet_max):
-        if (not (isinstance(hl_diff, (float, int)) and isinstance(n_jet_min, int) and isinstance(n_jet_max, int))):
-            raise TypeError("Please use the correct parameter types for TopReco(float or int, int, int)")
+        if (not (isinstance(hl_diff, (float, int)) and isinstance(n_jet_min, int) and isinstance(n_jet_max, int))):  # noqa
+            raise TypeError("Please use the correct parameter types for TopReco(float or int, int, int)")  # noqa
         elif (hl_diff < 0 or n_jet_min < 2 or n_jet_min > n_jet_max):
-            raise ValueError("Please use the correct parameter ranges for TopReco(x,y,z) with x>0, y>1 and z>=y")
+            raise ValueError("Please use the correct parameter ranges for TopReco(x,y,z) with x>0, y>1 and z>=y")  # noqa
         else:
             self.max_diff = hl_diff
             self.njet_min = n_jet_min
@@ -16,17 +18,17 @@ class TopReco:
 
     def neutrinoReconstruction(self, met, muon):
         Mw = 80.399
-        mu = Mw**2/2 + met.pt()*muon.pt()*math.cos(math.acos(met.px / met.pt())-muon.phi())
-        A = mu*muon.pz/muon.pt()**2
-        B = mu**2*muon.pz**2/muon.pt()**4
-        C = (muon.E**2*met.pt()**2-mu**2)/muon.pt()**2
-        discriminant = B-C
+        mu = Mw**2 / 2 + met.pt() * muon.pt() * math.cos(math.acos(met.px / met.pt()) - muon.phi())  # noqa
+        A = mu * muon.pz / muon.pt()**2
+        B = mu**2 * muon.pz**2 / muon.pt()**4
+        C = (muon.E**2 * met.pt()**2 - mu**2) / muon.pt()**2
+        discriminant = B - C
         solutions = []
         if (discriminant < 0):
             solutions.append(A)
         else:
-            solutions.append(A+math.sqrt(B-C))
-            solutions.append(A-math.sqrt(B-C))
+            solutions.append(A + math.sqrt(B - C))
+            solutions.append(A - math.sqrt(B - C))
         return solutions
 
     def calculateTopMass(self, jets, met, muon):
@@ -36,7 +38,7 @@ class TopReco:
         l_diff = self.max_diff
         if not isinstance(muon, FourMomentum) or not len(jets) > 2:
             return -1
-        # Calculating the neutrino 4-vector by using the missing transverse energy (met)
+        # Calculating the neutrino 4-vector by using the missing transverse energy (met)  # noqa
         solutions = self.neutrinoReconstruction(met, muon)
         if not solutions:
             return -1
@@ -49,27 +51,32 @@ class TopReco:
 
         # Looping over all possible neutrino four momentums
         for sol in range(len(solutions)):
-            neutrino = FourMomentum(met.px, met.py, solutions[sol], math.sqrt(met.pt()**2+solutions[sol]**2))
+            neutrino = FourMomentum(
+                met.px,
+                met.py,
+                solutions[sol],
+                math.sqrt(met.pt()**2 + solutions[sol]**2)
+                )
             # Looping over all jets as possible leptonic top candidates.
             for x in range(len(jets)):
-                # If there are two B-jets we want the leptonic top to have one of them
+                # If there are two B-jets we want the leptonic top to have one
                 if (N_bjets > 1):
                     if (not jets[x].has_b_tag):
                         continue
 
-                # Calculating the four momentum and the mass of the leptonic top
+                # Calculate the four momentum and the mass of the leptonic top
                 P_lep = neutrino + muon + jets[x]
-                Mt_lep = math.sqrt(P_lep*P_lep)
+                Mt_lep = math.sqrt(P_lep * P_lep)
 
-                # For each leptonic top candidate there are N-1 jets for the hadronic top remaining
-                for l in range(self.njet_min-1, self.njet_max):
-                    # Looping over all possible permutations of N-1 jets for the hadronic top
-                    for y in itertools.combinations(jets, l):
+                # For each leptonic top candidate there are N-1 jets for the hadronic top remaining  # noqa
+                for l_top in range(self.njet_min - 1, self.njet_max):
+                    # Looping over all possible permutations of N-1 jets for the hadronic top  # noqa
+                    for y in itertools.combinations(jets, l_top):
                         # We don't want to reuse the jet from the leptonic top
                         if jets[x] in y:
                             continue
-                        # Making sure that if possible b_tagged jets are getting used as b-jets
-                        if N_bjets > 1 or (N_bjets == 1 and not jets[x].has_b_tag):
+                        # Making sure that if possible b_tagged jets are getting used as b-jets  # noqa
+                        if N_bjets > 1 or (N_bjets == 1 and not jets[x].has_b_tag):  # noqa
                             Contains_B_jet = False
                             for k in B_jet:
                                 if jets[k] in y:
@@ -77,9 +84,9 @@ class TopReco:
                                     break
                             if not Contains_B_jet:
                                 continue
-                        # Sum of the N-1 jets that are getting used for hadronic top quark reconstruction
-                        P_had = functools.reduce(lambda a, b: a+b, y)
-                        Mt_had = math.sqrt(P_had*P_had)
+                        # Sum of the N-1 jets that are getting used for hadronic top quark reconstruction  # noqa
+                        P_had = functools.reduce(lambda a, b: a + b, y)
+                        Mt_had = math.sqrt(P_had * P_had)
                         # Only the best candidate is getting used.
                         if (l_diff > abs(Mt_lep - Mt_had)):
                             l_diff = abs(Mt_lep - Mt_had)

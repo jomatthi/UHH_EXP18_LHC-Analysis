@@ -6,7 +6,8 @@ ROOT.gErrorIgnoreLevel = 2002
 
 class Plotter(object):
     """
-    A plotter to produce .pdf files from the histograms stored in the output.root files.
+    A plotter to produce .pdf files from the histograms stored
+    in the output.root files.
     """
 
     def __init__(self, analyzers):
@@ -14,14 +15,22 @@ class Plotter(object):
         self.style = default_style()
         self.style.SetOptLogy(True)
         ROOT.gROOT.SetStyle("MyStyle");
-        self.colors = {'TTbar': 632, 'single top': 798, 'W+jets': 602, 'QCD': 867, 'DY+jets': 829, 'Diboson': 875}
+        self.colors = {
+            'TTbar': 632,
+            'single top': 798,
+            'W+jets': 602,
+            'QCD': 867,
+            'DY+jets': 829,
+            'Diboson': 875
+            }
         self.hists_data = []
         self.hists_stack = []
         self.hists_err = []
         if not os.path.exists('plots'):
             os.makedirs('plots')
         # loop over all histograms
-        # apply dataset specific styling and create THStack and TH1 objects for plotting
+        # apply dataset specific styling and create THStack and TH1 objects
+        # for plotting
         for process in analyzers.keys():
             i = 0
             is_data = ('data' in process.lower())
@@ -31,8 +40,8 @@ class Plotter(object):
                         if process in self.colors.keys():
                             hist.SetFillColor(self.colors[process])
                         if i >= len(self.hists_stack):
-                            self.hists_stack.append(ROOT.THStack(hist.GetName() + "_stack", hist.GetTitle()))
-                            self.hists_err.append(hist.Clone(hist.GetName() + "_err"))
+                            self.hists_stack.append(ROOT.THStack(hist.GetName() + "_stack", hist.GetTitle()))  # noqa
+                            self.hists_err.append(hist.Clone(hist.GetName() + "_err"))  # noqa
                             self.hists_err[i].SetTitle("stat. Uncert.")
                             self.hists_err[i].Reset()
                             self.hists_err[i].SetFillColor(923)
@@ -48,7 +57,7 @@ class Plotter(object):
                         self.hists_data.append(hist)
                     i += 1
 
-# self.histograms = {d:{{process:hist} for process in analyzers.keys()] for d in dirs}
+# self.histograms = {d:{{process:hist} for process in analyzers.keys()] for d in dirs}  # noqa
 
     def process(self):
         s = ""

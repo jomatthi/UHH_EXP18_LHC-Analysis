@@ -19,7 +19,7 @@ class Histograms(object):
         """
         # prevent to initialize histograms multiple times
         if self.is_init:
-            raise ValueError("Histograms(): called initialize_histograms() on initialized histograms")
+            raise ValueError("Histograms(): called initialize_histograms() on initialized histograms")  # noqa
         for hist in self.hists.values():
             hist.SetName(self.name+"_"+hist.GetName())
 
