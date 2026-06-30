@@ -36,7 +36,6 @@ def main():
 
     event_options = {
         "JEC": "nominal",
-        "muon_isolation": 0.1,
         "max_events": args.max_events,
     }
 

@@ -13,6 +13,15 @@ class EventBuilder:
 
     def __init__(self, options=None):
         options = dict(options or {})
+        unknown_options = set(options) - {"JEC"}
+
+        if unknown_options:
+            unknown = ", ".join(sorted(unknown_options))
+            raise ValueError(
+                f"Unknown EventBuilder option(s): {unknown}. "
+                "Muon isolation belongs to the analysis selection, "
+                "not to EventBuilder."
+            )
 
         self.btag_threshold = 1.74
 
@@ -25,15 +34,6 @@ class EventBuilder:
             )
 
         self.JEC = self.JEC_FACTORS[jec_mode]
-
-        self.muon_isolation_threshold = float(
-            options.get("muon_isolation", 0.1)
-        )
-
-        if self.muon_isolation_threshold < 0.0:
-            raise ValueError(
-                "Muon-isolation threshold must be non-negative."
-            )
 
     def build_event(self, tree):
         event = Event()
@@ -56,8 +56,7 @@ class EventBuilder:
             else:
                 muon.iso = tree.Muon_Iso[i] / muon.pt()
 
-            if muon.iso < self.muon_isolation_threshold:
-                event.muons.append(muon)
+            event.muons.append(muon)
 
         for i in range(tree.NJet):
             jet = Jet(

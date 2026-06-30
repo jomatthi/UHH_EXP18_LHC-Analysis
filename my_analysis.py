@@ -41,8 +41,6 @@ if __name__ == "__main__":
     event_options = {
         # Jet Energy corrections: "up" or "down" to evaluate the syst. error
         'JEC': 'nominal',
-        # muon isolation, you can leave this at the default value
-        'muon_isolation': 0.1
         }
 
     analyzers = OrderedDict()

@@ -10,12 +10,13 @@ class Analyzer:
     def __init__(self, dataset_name, file_name, event_options=None):
         event_options = dict(event_options or {})
 
+        self.max_events = event_options.pop("max_events", -1)
+        self.event_builder = EventBuilder(event_options)
+
         self.dataset_name = dataset_name
         self.file_name = file_name
-        self.event_builder = EventBuilder(event_options)
         self.histograms = OrderedDict()
         self.working_dataset = None
-        self.max_events = event_options.get("max_events", -1)
 
     def attach_histogram(self, histogram, name):
         self.histograms[name] = histogram

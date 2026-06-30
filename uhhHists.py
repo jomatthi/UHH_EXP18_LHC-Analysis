@@ -14,6 +14,7 @@ class DefaultHistograms(Histograms):
                 ('muon1_pt',     TH1F('muon1_pt', 'p_{T,#mu} [GeV]', 60, 0, 300)),  # noqa
                 ('muon1_eta',    TH1F('muon1_eta', '#eta_{#mu}', 50, -5.0, 5.0)),  # noqa
                 ('muon1_phi',    TH1F('muon1_phi', '#phi_{#mu}', 40, -3.2, 3.2)),  # noqa
+                ('muon1_iso',    TH1F('muon1_iso', 'relative muon isolation;I_{rel};Events', 60, 0.0, 1.2)),  # noqa
                 ('jets_number',  TH1F('jets_number', 'N_{jets}', 11, -0.5, 10.5)),  # noqa
                 ('jet1_pt',      TH1F('jet1_pt', 'p_{T,jet} [GeV]', 60, 0, 300)),  # noqa
                 ('jet1_eta',     TH1F('jet1_eta', '#eta_{jet}', 50, -5.0, 5.0)),  # noqa
@@ -53,6 +54,7 @@ class DefaultHistograms(Histograms):
             self.hists['muon1_pt'].Fill(muon.pt(), event_weight)
             self.hists['muon1_eta'].Fill(muon.eta(), event_weight)
             self.hists['muon1_phi'].Fill(muon.phi(), event_weight)
+            self.hists['muon1_iso'].Fill(muon.iso, event_weight)
 
         # fill jet hists
         self.hists['jets_number'].Fill(event.n_jets(), event_weight)

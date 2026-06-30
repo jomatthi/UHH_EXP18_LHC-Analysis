@@ -32,23 +32,24 @@ def make_tree(muons=(), jets=()):
     )
 
 
-def test_configured_muon_isolation_threshold_is_used():
-    # pT = 10 GeV, relative isolation = 2 / 10 = 0.2
+def test_event_builder_keeps_all_muons_and_calculates_isolation():
     tree = make_tree(
-        muons=[(10.0, 0.0, 0.0, 10.0, 1, 2.0)]
+        muons=[
+            (10.0, 0.0, 0.0, 10.0, 1, 2.0),   # I_rel = 0.2
+            (20.0, 0.0, 0.0, 20.0, -1, 0.5),  # I_rel = 0.025
+        ]
     )
 
-    loose_event = EventBuilder(
-        {"muon_isolation": 0.3}
-    ).build_event(tree)
+    event = EventBuilder().build_event(tree)
 
-    strict_event = EventBuilder(
-        {"muon_isolation": 0.1}
-    ).build_event(tree)
+    assert event.n_muons() == 2
+    assert event.muons[0].iso == pytest.approx(0.2)
+    assert event.muons[1].iso == pytest.approx(0.025)
 
-    assert loose_event.n_muons() == 1
-    assert loose_event.muons[0].iso == pytest.approx(0.2)
-    assert strict_event.n_muons() == 0
+
+def test_event_builder_rejects_selection_options():
+    with pytest.raises(ValueError, match="Muon isolation"):
+        EventBuilder({"muon_isolation": 0.1})
 
 
 def test_jec_scaling_preserves_jet_type_and_b_tagging():
