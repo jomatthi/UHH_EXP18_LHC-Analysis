@@ -47,7 +47,7 @@ class TTbarAnalyzer(Analyzer):
         self.TopReconstruction = TopReco(10.0, 2, 4)
 
         # add the histogram to plot the top mass
-        self.attach_histogram(
+        self.attach_topmass_histogram(
             TopMassHist(dataset_name+"_top_mass"),
             "top_mass"
             )

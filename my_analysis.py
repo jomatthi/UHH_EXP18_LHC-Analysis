@@ -59,8 +59,40 @@ if __name__ == "__main__":
     # Exercise 1: Properties of ttbar quark events
     # Exercise 2: Measurement of the ttbar production cross section
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    # print out the selection summary to a CSV file
-    write_selection_summary(analyzers)
+    # Here, you can retrieve the yields of the signal and background samples before and after the cuts.
+    cut_name = 'trigger'  # name of the cut to evaluate the yields, efficiency, and purity
+
+    signal_before_cuts = cut_yield(analyzers['TTbar'].cutflow, 'total')
+    signal_after_cuts = cut_yield(analyzers['TTbar'].cutflow, cut_name)
+
+    background_names = [
+        name for name in analyzers if name != 'TTbar' and name != 'Data'  # list of background datasets (excluding signal and data)
+    ]
+
+    background_yields_before_cuts = [
+        cut_yield(analyzers[name].cutflow, "total")
+        for name in background_names
+    ]
+
+    background_before_cuts = combine_yields(*background_yields_before_cuts)  # combine background yields before cuts
+    background_yields_after_cuts = [
+        cut_yield(analyzers[name].cutflow, cut_name)
+        for name in background_names
+    ]
+
+    background_after_cuts = combine_yields(*background_yields_after_cuts)  # combine background yields after cuts
+
+    print(f"Selection cut: {cut_name}")
+    print(f"Signal yields: {signal_before_cuts.sumw:.3f} ± {signal_before_cuts.stat_uncertainty:.3f} -> {signal_after_cuts.sumw:.3f} ± {signal_after_cuts.stat_uncertainty:.3f}")
+    print(f"Background yields: {background_before_cuts.sumw:.3f} ± {background_before_cuts.stat_uncertainty:.3f} -> {background_after_cuts.sumw:.3f} ± {background_after_cuts.stat_uncertainty:.3f}")
+
+    # calculate the selection efficiency and purity
+    # uncomment the following lines after implementing the efficiency and purity functions in SelectionMetrics.py
+    # signal_efficiency = efficiency(signal_before_cuts, signal_after_cuts)
+    # selection_purity = purity(signal_after_cuts, background_after_cuts)
+
+    # print(f"Signal efficiency: {signal_efficiency.value:24.2%} ± {signal_efficiency.stat_uncertainty:24.2%}")
+    # print(f"Selection purity: {selection_purity.value:24.2%} ± {selection_purity.stat_uncertainty:24.2%}")
 
     # Plot all histograms filled in the Analysis
     plotter = Plotter(analyzers)
