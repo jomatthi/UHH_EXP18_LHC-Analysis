@@ -2,6 +2,7 @@ from TTbarAnalyzer import TTbarAnalyzer
 from Plotter import Plotter
 from collections import OrderedDict
 from Fitter import Fitter
+from Cutflow import write_selection_summary
 
 if __name__ == "__main__":
     """
@@ -58,23 +59,8 @@ if __name__ == "__main__":
     # Exercise 1: Properties of ttbar quark events
     # Exercise 2: Measurement of the ttbar production cross section
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    # You can access variables from TTbarAnalyzer like this:
-    # total number of events in the TTbar sample
-    n_ttbar_total = analyzers['TTbar'].n_total
-
-    # total number of events in the background samples
-    n_background_total = sum(
-        [
-            # Sum total number of all events, except 'Data' and 'TTbar'
-            an.n_total for key, an in analyzers.items() if not (key == 'Data' or key == 'TTbar')  # noqa
-        ]
-    )
-
-    # print numbers in the terminal
-    print(f"Total number of ttbar events: {n_ttbar_total}")
-    # you can also reduce the numbers of digits
-    print(f"Total number of background events: {n_background_total:.4f}")
+    # print out the selection summary to a CSV file
+    write_selection_summary(analyzers)
 
     # Plot all histograms filled in the Analysis
     plotter = Plotter(analyzers)

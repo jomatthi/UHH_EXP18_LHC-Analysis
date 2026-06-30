@@ -4,6 +4,7 @@ from pathlib import Path
 import ROOT
 
 from EventBuilder import EventBuilder
+from Cutflow import Cutflow
 
 
 class Analyzer:
@@ -17,6 +18,7 @@ class Analyzer:
         self.file_name = file_name
         self.histograms = OrderedDict()
         self.working_dataset = None
+        self.cutflow = Cutflow()
 
     def attach_histogram(self, histogram, name):
         self.histograms[name] = histogram
@@ -58,6 +60,22 @@ class Analyzer:
             root_file.Close()
 
         print(f"Wrote output to {output_path}")
+    
+    def record_cut(self, stage_name, event):
+        """Record one event passing a named selection stage."""
+        self.cutflow.record(stage_name, event.weight)
+    
+    def write_cutflow(self):
+        output_path = (
+            Path(__file__).resolve().parent
+            / f"cutflow_{Path(self.file_name).stem}.csv"
+        )
+
+        self.cutflow.write_csv(output_path)
+
+        print()
+        print(self.cutflow.format_table(self.dataset_name))
+        print(f"Wrote cutflow to {output_path}")
 
     def run(self):
         """Process all events in this dataset."""
@@ -106,3 +124,4 @@ class Analyzer:
 
         print(f"Done. Processed {n_event} events.")
         self.write_output()
+        self.write_cutflow()

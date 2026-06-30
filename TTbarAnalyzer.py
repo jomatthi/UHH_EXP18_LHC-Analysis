@@ -34,11 +34,6 @@ class TTbarAnalyzer(Analyzer):
             )
 
         # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        # Here you can define your own variables
-        # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        self.n_total = 0.0
-
-        # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         # Creating the class that will reconstruct the top mass
         # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -71,7 +66,7 @@ class TTbarAnalyzer(Analyzer):
         # fill initial histogram
         self.fill_histograms(event, "total")
         # increase weighted total number of events for processed dataset
-        self.n_total += 1 * event.weight
+        self.record_cut("total", event)
 
         # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         # Exercise 1: Properties of ttbar quark events
@@ -87,6 +82,7 @@ class TTbarAnalyzer(Analyzer):
         # fill histograms for all events passing the trigger selection
         self.fill_histograms(event, "trigger")
         # remember to increase the number of events passing the trigger step
+        self.record_cut("trigger", event)
 
         # Have a look at your histograms and compare the different samples.
         # Try to enrich the fraction of ttbar events by cutting on any of
