@@ -1,49 +1,42 @@
-from collections import OrderedDict
-from types import SimpleNamespace
-
 import pytest
 
-from Cutflow import Cutflow, selection_summary
+from Cutflow import Cutflow
 
 
-def make_analyzer(total_yield, trigger_yield):
-    cutflow = Cutflow()
-    cutflow.record("total", total_yield)
-    cutflow.record("trigger", trigger_yield)
-
-    return SimpleNamespace(cutflow=cutflow)
-
-
-def test_cutflow_preserves_stage_order_and_yields():
+def test_cutflow_preserves_cut_order_yields_and_sumw2():
     cutflow = Cutflow()
 
     cutflow.record("total", 2.0)
     cutflow.record("total", 3.0)
     cutflow.record("trigger", 1.5)
 
-    assert cutflow.stage_names() == ("total", "trigger")
+    assert cutflow.cut_names() == ("total", "trigger")
+
     assert cutflow.raw_events("total") == 2
     assert cutflow.weighted_yield("total") == pytest.approx(5.0)
+    assert cutflow.sumw2("total") == pytest.approx(13.0)
 
-    rows = cutflow.rows()
+    assert cutflow.raw_events("trigger") == 1
+    assert cutflow.weighted_yield("trigger") == pytest.approx(1.5)
+    assert cutflow.sumw2("trigger") == pytest.approx(2.25)
 
-    assert rows[1]["efficiency_from_total"] == pytest.approx(0.3)
+
+def test_registered_empty_cut_is_kept_in_cutflow():
+    cutflow = Cutflow()
+
+    cutflow.register_cut("total")
+    cutflow.register_cut("bjet_n")
+    cutflow.record("total", 2.0)
+
+    assert cutflow.cut_names() == ("total", "bjet_n")
+
+    assert cutflow.raw_events("bjet_n") == 0
+    assert cutflow.weighted_yield("bjet_n") == pytest.approx(0.0)
+    assert cutflow.sumw2("bjet_n") == pytest.approx(0.0)
 
 
-def test_selection_summary_calculates_efficiency_and_purity():
-    analyzers = OrderedDict(
-        [
-            ("QCD", make_analyzer(100.0, 10.0)),
-            ("TTbar", make_analyzer(50.0, 25.0)),
-            ("W+jets", make_analyzer(50.0, 15.0)),
-        ]
-    )
+def test_non_finite_weights_are_rejected():
+    cutflow = Cutflow()
 
-    rows = selection_summary(analyzers)
-
-    trigger = rows[1]
-
-    assert trigger["signal_efficiency"] == pytest.approx(0.5)
-    assert trigger["background_yield"] == pytest.approx(25.0)
-    assert trigger["purity"] == pytest.approx(0.5)
-    assert trigger["dominant_background"] == "W+jets"
+    with pytest.raises(ValueError, match="finite"):
+        cutflow.record("total", float("nan"))

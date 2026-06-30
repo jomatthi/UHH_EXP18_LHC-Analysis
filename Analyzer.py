@@ -21,6 +21,20 @@ class Analyzer:
         self.cutflow = Cutflow()
 
     def attach_histogram(self, histogram, name):
+        if name in self.histograms:
+            raise ValueError(
+                f"Histogram group '{name}' is already registered."
+            )
+
+        self.histograms[name] = histogram
+        self.cutflow.register_cut(name)
+
+    def attach_topmass_histogram(self, histogram, name):
+        if name in self.histograms:
+            raise ValueError(
+                f"Histogram group '{name}' is already registered."
+            )
+
         self.histograms[name] = histogram
 
     def detach_histogram(self, name):
@@ -61,9 +75,9 @@ class Analyzer:
 
         print(f"Wrote output to {output_path}")
     
-    def record_cut(self, stage_name, event):
-        """Record one event passing a named selection stage."""
-        self.cutflow.record(stage_name, event.weight)
+    def record_cut(self, cut_name, event):
+        """Record one event passing a named selection cut."""
+        self.cutflow.record(cut_name, event.weight)
     
     def write_cutflow(self):
         output_path = (
