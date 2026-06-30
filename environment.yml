@@ -1,0 +1,6 @@
+name: exp18
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - root=6.40
