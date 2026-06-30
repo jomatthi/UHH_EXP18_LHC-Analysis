@@ -4,3 +4,4 @@
 *.pdf
 # Local instructor material
 .instructor/
+.instructor_tests/
