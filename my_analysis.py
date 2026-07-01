@@ -2,7 +2,10 @@ from TTbarAnalyzer import TTbarAnalyzer
 from Plotter import Plotter
 from collections import OrderedDict
 from Fitter import Fitter
-from Cutflow import write_selection_summary
+from SelectionMetrics import (
+    combine_yields,
+    cut_yield,
+)
 
 if __name__ == "__main__":
     """
@@ -82,9 +85,15 @@ if __name__ == "__main__":
 
     background_after_cuts = combine_yields(*background_yields_after_cuts)  # combine background yields after cuts
 
+    if run_all:
+        data_before_cuts = cut_yield(analyzers['Data'].cutflow, 'total')
+        data_after_cuts = cut_yield(analyzers['Data'].cutflow, cut_name)
+
     print(f"Selection cut: {cut_name}")
     print(f"Signal yields: {signal_before_cuts.sumw:.3f} ± {signal_before_cuts.stat_uncertainty:.3f} -> {signal_after_cuts.sumw:.3f} ± {signal_after_cuts.stat_uncertainty:.3f}")
     print(f"Background yields: {background_before_cuts.sumw:.3f} ± {background_before_cuts.stat_uncertainty:.3f} -> {background_after_cuts.sumw:.3f} ± {background_after_cuts.stat_uncertainty:.3f}")
+    if run_all:
+        print(f"Data yields: {data_before_cuts.sumw:.3f} ± {data_before_cuts.stat_uncertainty:.3f} -> {data_after_cuts.sumw:.3f} ± {data_after_cuts.stat_uncertainty:.3f}")
 
     # calculate the selection efficiency and purity
     # uncomment the following lines after implementing the efficiency and purity functions in SelectionMetrics.py
