@@ -1,6 +1,7 @@
 from Analyzer import Analyzer
 from uhhHists import DefaultHistograms, TopMassHist
 from TopReco import TopReco
+from Calibration import mass_coordinate
 
 
 class TTbarAnalyzer(Analyzer):
@@ -108,15 +109,14 @@ class TTbarAnalyzer(Analyzer):
         # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
         # Uncomment the following part to enable the top quark reconstruction.
-
         # mass = self.TopReconstruction.calculateTopMass(
         #     event.jets,
         #     event.met,
         #     event.muons[0]
-        #     )
+        # )
 
-        # if (mass > 0):
-        #     event.top_mass = mass
+        # if mass > 0:
+        #     event.top_mass = mass_coordinate(mass)
         #     self.fill_histograms(event, "top_mass")
 
         # Uncomment the lines responsible for fitting the top mass in
