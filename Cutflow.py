@@ -11,7 +11,7 @@ class Cutflow:
         self._cuts = OrderedDict()
     
     def register_cut(self, cut_name):
-        """Register a cut cut even if no event ever passes it."""
+        """Register a cut even if no event ever passes it."""
         if not isinstance(cut_name, str) or not cut_name.strip():
             raise ValueError("Cutflow cut names must be non-empty strings.")
 

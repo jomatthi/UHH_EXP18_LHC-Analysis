@@ -103,7 +103,16 @@ class TopMassHist(Histograms):
     def __init__(self, name):
         self.hists = OrderedDict(
             [
-                ('top_mass', TH1F('top_mass', ';M_{T}', 60, 0, 300)),
+                (
+                    "top_mass",
+                    TH1F(
+                        "top_mass",
+                        ";reconstructed top-mass coordinate [arb. units];Events",
+                        60,
+                        0,
+                        500,
+                    ),
+                ),
             ]
         )
         # DO NOT TOUCH THIS PART

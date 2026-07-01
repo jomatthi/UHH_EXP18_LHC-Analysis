@@ -30,9 +30,12 @@ class Fitter(object):
             self.mean = fit.GetParameter(1)
             self.unc = fit.GetParError(1)
             print('\n\n------------------------------------------------------')
-            print(f'Fitted top quark mass in data: {str(self.mean)} +- {str(self.unc)} GeV\n')  # noqa
+            print(
+                "Fitted reconstructed top-mass coordinate in data: "
+                f"{self.mean:.3f} +- {self.unc:.3f} blinded units"
+            )
             print(f'With {str(self.top_hist.GetEntries())} top quark candidates')  # noqa
-            c.SaveAs("ReconstructedTopMass.pdf")
+            c.SaveAs("ReconstructedTopMass_blinded.pdf")
             del c
 
         c = ROOT.TCanvas()
@@ -42,8 +45,11 @@ class Fitter(object):
         self.mean = fit.GetParameter(1)
         self.unc = fit.GetParError(1)
         print('\n\n------------------------------------------------------')
-        print(f'Fitted top quark mass in Monte Carlo: {str(self.mean)} +- {str(self.unc)} GeV\n')  # noqa
+        print(
+            "Fitted reconstructed top-mass coordinate in MC: "
+            f"{self.mean:.3f} +- {self.unc:.3f} blinded units"
+        )
         print(f'With {str(self.top_hist_MC.GetEntries())} top quark candidates')  # noqa
-        c.SaveAs("ReconstructedTopMass_MC.pdf")
+        c.SaveAs("ReconstructedTopMass_blinded_MC.pdf")
         del c
         return self.top_hist_MC
