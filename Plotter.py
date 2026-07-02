@@ -63,49 +63,58 @@ class Plotter(object):
 
     def process(self):
         s = ""
-        for i in range(0, len(self.hists_stack)):
+
+        for i in range(len(self.hists_stack)):
             h = self.hists_stack[i]
             c = ROOT.TCanvas("c", "c", 800, 600)
-            if h.GetMaximum() <= 0: h.SetMaximum(1)
+
+            if h.GetMaximum() <= 0:
+                h.SetMaximum(1)
+
             h.SetMinimum(0.8)
             h.Draw("hist")
+
             h.GetXaxis().SetTitle(h.GetTitle())
             h.GetXaxis().SetTitleOffset(1.3)
             h.GetYaxis().SetTitle("Events")
             h.GetYaxis().SetTitleOffset(1.3)
-            c.Modified()
+
             self.hists_err[i].Draw("E2SAME")
-            c.Modified()
-            c.BuildLegend(0.76, 0.4, 0.95, 0.95, "");
-            c.Print(self.output_dir+"plots/"+"_".join(h.GetName().split("_")[1:])+"_MC.pdf")
-            if len(self.hists_data) > 0:
+            c.BuildLegend(0.76, 0.4, 0.95, 0.95, "")
+
+            c.Print(
+                self.output_dir
+                + "plots/"
+                + "_".join(h.GetName().split("_")[1:])
+                + "_MC.pdf"
+            )
+
+            if i < len(self.hists_data):
                 self.hists_data[i].Draw("PESAME")
-                c.BuildLegend(0.75, 0.35, 0.95, 0.95, "");
-                c.Print(self.output_dir+"plots/"+"_".join(h.GetName().split("_")[1:])+".pdf")
+                c.BuildLegend(0.75, 0.35, 0.95, 0.95, "")
+                c.Print(
+                    self.output_dir
+                    + "plots/"
+                    + "_".join(h.GetName().split("_")[1:])
+                    + ".pdf"
+                )
 
-            old_s = s
+            pdf_name = "_".join(h.GetName().split("_")[1:])
+            pdf_name = pdf_name.split("_default", 1)[0] + ".pdf"
+            pdf_path = self.output_dir + pdf_name
 
-            # Name der mehrseitigen PDF ohne Pfad erzeugen
-            s = "_".join(h.GetName().split("_")[1:])
-            s = s.split("_default", 1)[0] + ".pdf"
+            if pdf_path != s:
+                if s:
+                    c.Print(s + "]")
 
-            # Pfad genau einmal ergänzen
-            s = self.output_dir + s
+                c.Print(pdf_path + "[")
+                s = pdf_path
 
-            if s != old_s:
-                if old_s != "":
-                    c.Print(old_s + ")")
+            c.Print(s)
 
-                if i == len(self.hists_stack) - 1:
-                    c.Print(s)
-                else:
-                    c.Print(s + "(")
+            if i == len(self.hists_stack) - 1:
+                c.Print(s + "]")
 
-            elif i == len(self.hists_stack) - 1:
-                c.Print(s + ")")
-
-            else:
-                c.Print(s)
             del c
 
 

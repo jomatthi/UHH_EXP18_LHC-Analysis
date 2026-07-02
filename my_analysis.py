@@ -52,46 +52,52 @@ if __name__ == "__main__":
         datasets = OrderedDict(
             [
                 ('Data', 'data.root'),
+                ('TTbar', 'ttbar.root'),
                 ('QCD', 'qcd.root'),
                 ('Diboson', 'diboson.root'),
                 ('DY+jets', 'dy.root'),
                 ('single top', 'single_top.root'),
-                ('TTbar', 'ttbar.root'),
                 ('W+jets', 'wjets.root'),
             ]
         )
     else:
         datasets = OrderedDict(
             [
+                ('TTbar', 'ttbar.root'),
                 ('QCD', 'qcd.root'),
                 ('Diboson', 'diboson.root'),
                 ('DY+jets', 'dy.root'),
                 ('single top', 'single_top.root'),
-                ('TTbar', 'ttbar.root'),
                 ('W+jets', 'wjets.root'),
             ]
         )
 
     print(f"\nRunning JEC variation: {jec_mode}")
     analyzers = run_variation(datasets, jec_mode)
+    print("")
 
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # Exercise 1: Properties of ttbar quark events
     # Exercise 2: Measurement of the ttbar production cross section
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    # Here, you can retrieve the yields of the signal and background samples before and after the cuts.
+
+    # print out selection chain for the signal sample to see which cuts are available
+    # cut1 -> cut2 -> cut3 -> ... -> cutN
+    list_of_cuts = list(analyzers['TTbar'].cutflow.cut_names())
+    for i, cut in enumerate(list_of_cuts):
+        print(f"Cut {i+1}: {cut}")
+
+    # name of the last cut in the selection chain to evaluate the yields, efficiency, and purity for
+    cut_name = list_of_cuts[-1]
+
+    # retrieve the yields for the signal sample before and after the cuts
+    signal_before_cuts = cut_yield(analyzers['TTbar'].cutflow, 'total')
+    signal_after_cuts = cut_yield(analyzers['TTbar'].cutflow, cut_name)
 
     # list of background datasets (excluding signal and data)
     background_names = [
         name for name in analyzers if name != 'TTbar' and name != 'Data'
     ]
-
-    # name of the last cut in the selection chain to evaluate the yields, efficiency, and purity for
-    cut_name = 'trigger'
-
-    # retrieve the yields for the signal sample before and after the cuts
-    signal_before_cuts = cut_yield(analyzers['TTbar'].cutflow, 'total')
-    signal_after_cuts = cut_yield(analyzers['TTbar'].cutflow, cut_name)
 
     # retrieve the yields for the background samples before and after the cuts
     background_yields_before_cuts = [
@@ -152,4 +158,5 @@ if __name__ == "__main__":
     # fitter.fit(130., 300.)  # fitter.fit(x,y) with (x,y) fit range
 
     print("=" * 90)
+    print("")
     print("Analysis completed.")
