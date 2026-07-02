@@ -57,7 +57,7 @@ def main():
         analyzers[dataset_name] = analyzer
 
     expected_outputs = [
-        Path(f"output_{file_name}")
+        Path(f"results/smoke_test/output_{file_name}")
         for file_name in DATASETS.values()
     ]
 

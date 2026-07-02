@@ -10,15 +10,22 @@ class TTbarAnalyzer(Analyzer):
     Derived from Analyzer base class.
     """
 
-    def __init__(self, dataset_name, file_name, event_options={}):
+    def __init__(
+        self,
+        dataset_name,
+        file_name,
+        event_options=None,
+        output_dir=None,
+    ):
         ################
         # DO NOT TOUCH #
         # initialize base class functionality
         super(TTbarAnalyzer, self).__init__(
             dataset_name,
             file_name,
-            event_options
-            )
+            event_options=event_options,
+            output_dir=output_dir,
+        )
         ################
 
         # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

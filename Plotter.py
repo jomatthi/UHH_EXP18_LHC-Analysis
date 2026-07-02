@@ -26,8 +26,10 @@ class Plotter(object):
         self.hists_data = []
         self.hists_stack = []
         self.hists_err = []
-        if not os.path.exists('plots'):
-            os.makedirs('plots')
+        first_analyzer = list(analyzers.values())[0]
+        self.output_dir = f"{first_analyzer.output_dir}/"
+        if not os.path.exists(self.output_dir+"plots/"):
+            os.makedirs(self.output_dir+"plots/")
         # loop over all histograms
         # apply dataset specific styling and create THStack and TH1 objects
         # for plotting
@@ -75,24 +77,33 @@ class Plotter(object):
             self.hists_err[i].Draw("E2SAME")
             c.Modified()
             c.BuildLegend(0.76, 0.4, 0.95, 0.95, "");
-            c.Print("plots/"+"_".join(h.GetName().split("_")[1:])+"_MC.pdf")
+            c.Print(self.output_dir+"plots/"+"_".join(h.GetName().split("_")[1:])+"_MC.pdf")
             if len(self.hists_data) > 0:
                 self.hists_data[i].Draw("PESAME")
                 c.BuildLegend(0.75, 0.35, 0.95, 0.95, "");
-                c.Print("plots/"+"_".join(h.GetName().split("_")[1:])+".pdf")
+                c.Print(self.output_dir+"plots/"+"_".join(h.GetName().split("_")[1:])+".pdf")
 
             old_s = s
+
+            # Name der mehrseitigen PDF ohne Pfad erzeugen
             s = "_".join(h.GetName().split("_")[1:])
-            s = "".join(s.split("_default")[0:1])+".pdf"
-            if (s != old_s):
-                if (i == len(self.hists_stack) - 1):
+            s = s.split("_default", 1)[0] + ".pdf"
+
+            # Pfad genau einmal ergänzen
+            s = self.output_dir + s
+
+            if s != old_s:
+                if old_s != "":
+                    c.Print(old_s + ")")
+
+                if i == len(self.hists_stack) - 1:
                     c.Print(s)
                 else:
-                    c.Print(s+"(")
-                if (old_s != ""):
-                    c.Print(old_s+"]")
-            elif (i == len(self.hists_stack) - 1):
-                c.Print(s+")")
+                    c.Print(s + "(")
+
+            elif i == len(self.hists_stack) - 1:
+                c.Print(s + ")")
+
             else:
                 c.Print(s)
             del c

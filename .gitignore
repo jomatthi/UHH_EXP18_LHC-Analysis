@@ -5,5 +5,5 @@
 # Local instructor material
 .instructor/
 .instructor_tests/
-cutflow_*.csv
-selection_summary.csv
+results/
+solutions/

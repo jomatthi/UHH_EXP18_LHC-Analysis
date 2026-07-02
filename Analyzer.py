@@ -8,16 +8,33 @@ from Cutflow import Cutflow
 
 
 class Analyzer:
-    def __init__(self, dataset_name, file_name, event_options=None):
+    def __init__(
+        self,
+        dataset_name,
+        file_name,
+        event_options=None,
+        output_dir=None,
+    ):
         event_options = dict(event_options or {})
+
+        self.dataset_name = dataset_name
+        self.file_name = file_name
+
+        # Repository bleibt der Ort für Eingabedateien.
+        self.repo_dir = Path(__file__).resolve().parent
+
+        # Nur Ergebnisse gehen in die Variations-Unterordner.
+        self.output_dir = (
+            Path(output_dir)
+            if output_dir is not None
+            else self.repo_dir
+        )
+        self.output_dir.mkdir(parents=True, exist_ok=True)
 
         self.max_events = event_options.pop("max_events", -1)
         self.event_builder = EventBuilder(event_options)
 
-        self.dataset_name = dataset_name
-        self.file_name = file_name
         self.histograms = OrderedDict()
-        self.working_dataset = None
         self.cutflow = Cutflow()
 
     def attach_histogram(self, histogram, name):
@@ -45,9 +62,8 @@ class Analyzer:
     
     def write_output(self):
         """Write all attached histograms to a ROOT output file."""
-        output_path = (
-            Path(__file__).resolve().parent
-            / f"output_{self.file_name}"
+        output_path = self.output_dir / (
+            f"output_{Path(self.file_name).stem}.root"
         )
 
         root_file = ROOT.TFile.Open(str(output_path), "RECREATE")
@@ -80,9 +96,8 @@ class Analyzer:
         self.cutflow.record(cut_name, event.weight)
     
     def write_cutflow(self):
-        output_path = (
-            Path(__file__).resolve().parent
-            / f"cutflow_{Path(self.file_name).stem}.csv"
+        output_path = self.output_dir / (
+            f"cutflow_{Path(self.file_name).stem}.csv"
         )
 
         self.cutflow.write_csv(output_path)
