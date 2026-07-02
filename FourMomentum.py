@@ -70,7 +70,7 @@ class FourMomentum(object):
         result = math.atan2(self.py, self.px)
         return result
 
-    def E(self):
+    def energy(self):
         """
         return energy
         """

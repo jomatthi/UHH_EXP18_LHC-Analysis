@@ -108,7 +108,7 @@ class Analyzer:
 
     def run(self):
         """Process all events in this dataset."""
-        print(f"Start processing {self.dataset_name}.")
+        print(f"\nStart processing {self.dataset_name}.")
 
         input_path = Path(__file__).resolve().parent / "files" / self.file_name
         root_file = ROOT.TFile.Open(str(input_path), "READ")

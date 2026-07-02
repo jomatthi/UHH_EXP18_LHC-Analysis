@@ -1,7 +1,6 @@
 from Analyzer import Analyzer
 from uhhHists import DefaultHistograms, TopMassHist
 from TopReco import TopReco
-from Calibration import mass_coordinate
 
 
 class TTbarAnalyzer(Analyzer):
@@ -50,9 +49,11 @@ class TTbarAnalyzer(Analyzer):
         # y = minimum number of jets used for reconstruction.
         # z = maximum number of jets used for reconstruction
         # y=z is possible.
-        # The default values are x=10.0, y=2, z=4
 
-        self.TopReconstruction = TopReco(10.0, 2, 4)
+        # The default values are x=1.0, y=2, z=3, which are far from optimal.
+        # You need to change them to optimize the reconstruction.
+
+        self.TopReconstruction = TopReco(1.0, 2, 3)
 
         # add the histogram to plot the top mass
         self.attach_topmass_histogram(
@@ -89,33 +90,36 @@ class TTbarAnalyzer(Analyzer):
             return
         # fill histograms for all events passing the trigger selection
         self.fill_histograms(event, "trigger")
-        # remember to increase the number of events passing the trigger step
+        # remember to increase the selection statistics of events passing the trigger step
         self.record_cut("trigger", event)
 
         # Have a look at your histograms and compare the different samples.
         # Try to enrich the fraction of ttbar events by cutting on any of
         # the distributions. Plot all variables after every cut you introduce.
-        # Therefore define a new set of Histogramms at the top of this program.
+        # Therefore define a new set of Histogramms at the top of this program,
+        # in addition to the cuts implemented here.
 
         # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         # Exercise 2: Measurement of the ttbar production cross section
         # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-        # Once you have optimized your event selection, calculate the
-        # selection efficiency after each selection step. Can you improve
-        # it further?
+        # Implement the selection efficiency and purity calculations in 'SelectionMetrics.py'.
+        # Try to optimize your selection to get the best efficiency and purity.
 
-        # Now include also the 'Data' sample when running the analysis.
+        # Once you have optimized your event selection, include also the 'Data' sample when running the analysis,
+        # by calling the script with the '--run_all' option.
         # Calculate the production cross section and error on it with
         # the given formula.
         # Rerun the analysis with the JEC variations to get the systematic
-        # error on your measurement.
+        # error on your measurement. This can be done by calling the script with the '--jec up/down' option.
+        # You can now skip the plotting of the histograms by calling the script with the '--skip-plots' option.
 
         # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         # Exercise 3: Reconstruction of the top quark mass
         # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
         # Uncomment the following part to enable the top quark reconstruction.
+        # from Calibration import mass_coordinate
         # mass = self.TopReconstruction.calculateTopMass(
         #     event.jets,
         #     event.met,

@@ -95,6 +95,7 @@ class Cutflow:
                 f"{'cut':<24}"
                 f"{'raw events':>14}"
                 f"{'weighted yield':>20}"
+                f"{'statistical uncertainty':>30}"
             ),
         ]
 
@@ -104,6 +105,7 @@ class Cutflow:
                 f"{row['cut']:<24}"
                 f"{row['raw_events']:>14d}"
                 f"{row['weighted_yield']:>20.4f}"
+                f"{row['yield_statistical_uncertainty']:>30.4f}"
             )
 
         return "\n".join(lines)

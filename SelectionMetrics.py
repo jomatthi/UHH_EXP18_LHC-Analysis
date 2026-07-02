@@ -143,7 +143,7 @@ def efficiency(
             ),
         )
 
-    # TODO 1: Implement epsilon = W_pass / W_total.
+    # TODO 1: Implement epsilon = W_pass / (W_pass + W_fail).
     value = None
 
     # TODO 2: Implement Var(epsilon) from V_pass and V_fail.
