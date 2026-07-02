@@ -1,20 +1,51 @@
-from TTbarAnalyzer import TTbarAnalyzer
 from Plotter import Plotter
 from collections import OrderedDict
-from Fitter import Fitter
 from SelectionMetrics import (
     combine_yields,
     cut_yield,
 )
+import argparse
+from TTbarAnalyzer import run_variation
+
+JEC_MODES = ("nominal", "up", "down")
+
+
+def resolve_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--jec",
+        choices=JEC_MODES,
+        default="nominal",
+        help="Choose the JEC variation to run (default: nominal)."
+    )
+    parser.add_argument(
+        "--run-all",
+        action="store_true",
+        default=False,
+        help="Run the analysis on all datasets, including data (default: False)."
+    )
+    parser.add_argument(
+        "--skip-plots",
+        action="store_true",
+        default=False,
+        help="Skip creating PDF plots (default: False)."
+    )
+    return parser.parse_args()
+
 
 if __name__ == "__main__":
     """
     Main analysis script. Here you run the analysis and evaluate the results.
+    You can choose the JEC variation to run, whether to include data in the analysis, and whether to skip creating PDF plots.
+    The script will print the yields of the signal and background samples before and after the cuts, and can also calculate the
+    selection efficiency and purity if the corresponding functions are implemented in SelectionMetrics.py.
+    Additionally, you can fit the top mass distribution by uncommenting the relevant lines and providing the fit range.
     """
-
-    # Choose run mode ('False' as default to design & optimize the analysis):
-    run_all = False  # only run the Monte Carlo simulation.
-    # run_all = True  # run both Data and Monte Carlo simulation.
+    # resolve command-line arguments
+    args = resolve_args()
+    jec_mode = args.jec
+    run_all = args.run_all
+    skip_plots = args.skip_plots
 
     # List of datasets to be analyzed
     if run_all:
@@ -41,22 +72,8 @@ if __name__ == "__main__":
             ]
         )
 
-    # Options for the event builder
-    event_options = {
-        # Jet Energy corrections: "up" or "down" to evaluate the syst. error
-        'JEC': 'nominal',
-        }
-
-    analyzers = OrderedDict()
-
-    # Analyze datasets:
-    for name, file_name in datasets.items():
-        # create an Analyzer for each dataset
-        analyzer = TTbarAnalyzer(name, file_name, event_options)
-        # run the Analyzer
-        analyzer.run()
-        # store the results
-        analyzers[name] = analyzer
+    print(f"\nRunning JEC variation: {jec_mode}")
+    analyzers = run_variation(datasets, jec_mode)
 
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # Exercise 1: Properties of ttbar quark events
@@ -121,8 +138,9 @@ if __name__ == "__main__":
     #     print(f"Data efficiency: {data_efficiency.value:.2%} ± {data_efficiency.stat_uncertainty:.2%}")
 
     # Plot all histograms filled in the Analysis
-    plotter = Plotter(analyzers)
-    plotter.process()
+    if not skip_plots:
+        plotter = Plotter(analyzers)
+        plotter.process()
 
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # Exercise 3: Reconstruction of the top quark mass

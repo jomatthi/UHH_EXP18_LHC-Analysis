@@ -3,7 +3,7 @@ from collections import OrderedDict
 from pathlib import Path
 
 from Plotter import Plotter
-from TTbarAnalyzer import TTbarAnalyzer
+from TTbarAnalyzer import run_variation
 
 
 DATASETS = OrderedDict(
@@ -17,7 +17,6 @@ DATASETS = OrderedDict(
         ("W+jets", "wjets.root"),
     ]
 )
-
 
 def main():
     parser = argparse.ArgumentParser(
@@ -34,27 +33,13 @@ def main():
     if args.max_events < 1:
         parser.error("--max-events must be at least 1.")
 
-    event_options = {
-        "JEC": "nominal",
-        "max_events": args.max_events,
-    }
-
     print(
         "Starting smoke test: "
         f"{len(DATASETS)} datasets, "
         f"at most {args.max_events} events each."
     )
 
-    analyzers = OrderedDict()
-
-    for dataset_name, file_name in DATASETS.items():
-        analyzer = TTbarAnalyzer(
-            dataset_name,
-            file_name,
-            event_options,
-        )
-        analyzer.run()
-        analyzers[dataset_name] = analyzer
+    analyzers = run_variation(DATASETS, n_events=args.max_events, smoke_test=True)
 
     expected_outputs = [
         Path(f"results/smoke_test/output_{file_name}")

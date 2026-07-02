@@ -1,6 +1,8 @@
 from Analyzer import Analyzer
 from uhhHists import DefaultHistograms, TopMassHist
 from TopReco import TopReco
+from pathlib import Path
+from collections import OrderedDict
 
 
 class TTbarAnalyzer(Analyzer):
@@ -132,3 +134,33 @@ class TTbarAnalyzer(Analyzer):
 
         # Uncomment the lines responsible for fitting the top mass in
         # 'my_analysis.py'. You may modify the variables x,y in fit(x,y)
+
+
+def run_variation(datasets, jec_mode="nominal", smoke_test=False, n_events=None):
+    # set the output directory for the results of this JEC variation
+    if smoke_test:
+        output_dir = Path("results") / "smoke_test"
+    else:
+        output_dir = Path("results") / f"jec_{jec_mode}"
+
+    event_options = {
+        "JEC": jec_mode,
+    }
+    if n_events is not None:
+        event_options["max_events"] = n_events
+
+    analyzers = OrderedDict()
+
+    for name, file_name in datasets.items():
+        # create an instance of the TTbarAnalyzer for each dataset
+        analyzer = TTbarAnalyzer(
+            name,
+            file_name,
+            event_options,
+            output_dir=output_dir,
+        )
+        # run the analysis for this dataset
+        analyzer.run()
+        analyzers[name] = analyzer
+
+    return analyzers
