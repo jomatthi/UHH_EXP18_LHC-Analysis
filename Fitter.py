@@ -15,6 +15,7 @@ class Fitter(object):
                 self.top_hist_MC.Add(analyzers[x].histograms['top_mass'].hists['top_mass'])  # noqa
         self.mean = 0.0
         self.unc = 0.0
+        self.output_dir = analyzers['TTbar'].output_dir
 
     def fit(self, fit_min, fit_max):
         MyStyle = ROOT.TStyle("MyStyle1", "My Root Style1")
@@ -35,7 +36,7 @@ class Fitter(object):
                 f"{self.mean:.3f} +- {self.unc:.3f} blinded units"
             )
             print(f'With {str(self.top_hist.GetEntries())} top quark candidates')  # noqa
-            c.SaveAs("ReconstructedTopMass_blinded.pdf")
+            c.SaveAs(f"{self.output_dir}/ReconstructedTopMass_blinded.pdf")
             del c
 
         c = ROOT.TCanvas()
@@ -50,6 +51,6 @@ class Fitter(object):
             f"{self.mean:.3f} +- {self.unc:.3f} blinded units"
         )
         print(f'With {str(self.top_hist_MC.GetEntries())} top quark candidates')  # noqa
-        c.SaveAs("ReconstructedTopMass_blinded_MC.pdf")
+        c.SaveAs(f"{self.output_dir}/ReconstructedTopMass_blinded_MC.pdf")
         del c
         return self.top_hist_MC

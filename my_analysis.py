@@ -147,6 +147,8 @@ if __name__ == "__main__":
     if not skip_plots:
         plotter = Plotter(analyzers)
         plotter.process()
+    print("=" * 90)
+    print("")
 
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # Exercise 3: Reconstruction of the top quark mass
