@@ -72,3 +72,19 @@ def test_jec_scaling_preserves_jet_type_and_b_tagging():
 def test_invalid_jec_mode_is_rejected():
     with pytest.raises(ValueError, match="JEC"):
         EventBuilder({"JEC": "sideways"})
+
+def test_jec_shift_is_propagated_to_met():
+    tree = make_tree(
+        jets=[
+            (100.0, 20.0, 30.0, 110.0, 2.0),
+        ]
+    )
+    tree.MET_px = 30.0
+    tree.MET_py = -10.0
+
+    event = EventBuilder({"JEC": "up"}).build_event(tree)
+
+    # Jet changes by (+5, +1) GeV for JEC up.
+    # MET must change oppositely.
+    assert event.met.px == pytest.approx(25.0)
+    assert event.met.py == pytest.approx(-11.0)
