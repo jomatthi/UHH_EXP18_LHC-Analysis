@@ -46,16 +46,19 @@ class TTbarAnalyzer(Analyzer):
         # Creating the class that will reconstruct the top mass
         # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-        # TopReco(x,y,z)
-        # x = max allowed mass difference between leptonic and hadronic top
-        # y = minimum number of jets used for reconstruction.
-        # z = maximum number of jets used for reconstruction
-        # y=z is possible.
+        # TopReco(mass_diff, n_jet_min, n_jet_max)
+        # mass_diff = max allowed mass difference between leptonic and hadronic top
+        # n_jet_min = minimum number of jets used for reconstruction.
+        # n_jet_max = maximum number of jets used for reconstruction
+        # n_jet_min=n_jet_max is possible.
 
-        # The default values are x=1.0, y=2, z=3, which are far from optimal.
+        # The default values are mass_diff=1.0, n_jet_min=2, n_jet_max=3, which are far from optimal.
         # You need to change them to optimize the reconstruction.
+        mass_diff = 1.0
+        n_jet_min = 2
+        n_jet_max = 3
 
-        self.TopReconstruction = TopReco(1.0, 2, 3)
+        self.TopReconstruction = TopReco(mass_diff, n_jet_min, n_jet_max)
 
         # add the histogram to plot the top mass
         self.attach_topmass_histogram(

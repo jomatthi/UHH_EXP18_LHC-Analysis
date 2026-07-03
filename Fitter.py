@@ -30,7 +30,6 @@ class Fitter(object):
             fit = self.top_hist.GetFunction("gaus")
             self.mean = fit.GetParameter(1)
             self.unc = fit.GetParError(1)
-            print('\n\n------------------------------------------------------')
             print(
                 "Fitted reconstructed top-mass coordinate in data: "
                 f"{self.mean:.3f} +- {self.unc:.3f} blinded units"
@@ -39,18 +38,18 @@ class Fitter(object):
             c.SaveAs(f"{self.output_dir}/ReconstructedTopMass_blinded.pdf")
             del c
 
-        c = ROOT.TCanvas()
-        self.top_hist_MC.Draw()
-        self.top_hist_MC.Fit("gaus", "Q", "", fit_min, fit_max)
-        fit = self.top_hist_MC.GetFunction("gaus")
-        self.mean = fit.GetParameter(1)
-        self.unc = fit.GetParError(1)
-        print('\n\n------------------------------------------------------')
-        print(
-            "Fitted reconstructed top-mass coordinate in MC: "
-            f"{self.mean:.3f} +- {self.unc:.3f} blinded units"
-        )
-        print(f'With {str(self.top_hist_MC.GetEntries())} top quark candidates')  # noqa
-        c.SaveAs(f"{self.output_dir}/ReconstructedTopMass_blinded_MC.pdf")
-        del c
-        return self.top_hist_MC
+        # c = ROOT.TCanvas()
+        # self.top_hist_MC.Draw()
+        # self.top_hist_MC.Fit("gaus", "Q", "", fit_min, fit_max)
+        # fit = self.top_hist_MC.GetFunction("gaus")
+        # self.mean = fit.GetParameter(1)
+        # self.unc = fit.GetParError(1)
+        # print('\n\n------------------------------------------------------')
+        # print(
+        #     "Fitted reconstructed top-mass coordinate in MC: "
+        #     f"{self.mean:.3f} +- {self.unc:.3f} blinded units"
+        # )
+        # print(f'With {str(self.top_hist_MC.GetEntries())} top quark candidates')  # noqa
+        # c.SaveAs(f"{self.output_dir}/ReconstructedTopMass_blinded_MC.pdf")
+        # del c
+        return self.top_hist
