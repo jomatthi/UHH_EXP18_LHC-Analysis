@@ -107,7 +107,7 @@ class TopMassHist(Histograms):
                     "top_mass",
                     TH1F(
                         "top_mass",
-                        "reconstructed top-mass coordinate [arb. units];Events",
+                        ";reconstructed top-mass coordinate [arb. units];Events",
                         60,  # number of bins
                         0,  # x-axis minimum
                         500,  # x-axis maximum

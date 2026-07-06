@@ -124,13 +124,6 @@ if __name__ == "__main__":
     print("Background yields:")
     print(f"{background_before_cuts.sumw:.3f} ± {background_before_cuts.stat_uncertainty:.3f} -> {background_after_cuts.sumw:.3f} ± {background_after_cuts.stat_uncertainty:.3f}")
 
-    # if the analysis is run with data, print the data yields as well
-    if run_all:
-        data_before_cuts = cut_yield(analyzers['Data'].cutflow, 'total')
-        data_after_cuts = cut_yield(analyzers['Data'].cutflow, cut_name)
-        print("Data yields:")
-        print(f"{data_before_cuts.sumw:.3f} ± {data_before_cuts.stat_uncertainty:.3f} -> {data_after_cuts.sumw:.3f} ± {data_after_cuts.stat_uncertainty:.3f}")
-
     # calculate the selection efficiency and purity
     # uncomment the following lines after implementing the efficiency and purity functions in SelectionMetrics.py
     # from SelectionMetrics import efficiency, purity
@@ -139,9 +132,6 @@ if __name__ == "__main__":
 
     # print(f"Signal efficiency: {signal_efficiency.value:.2%} ± {signal_efficiency.stat_uncertainty:.2%}")
     # print(f"Selection purity: {selection_purity.value:.2%} ± {selection_purity.stat_uncertainty:.2%}")
-    # if run_all:
-    #     data_efficiency = efficiency(data_before_cuts, data_after_cuts)
-    #     print(f"Data efficiency: {data_efficiency.value:.2%} ± {data_efficiency.stat_uncertainty:.2%}")
 
     # Plot all histograms filled in the Analysis
     if not skip_plots:
