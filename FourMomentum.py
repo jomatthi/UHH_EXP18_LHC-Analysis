@@ -37,11 +37,11 @@ class FourMomentum(object):
         elif isinstance(other, (int, float, complex)) and not isinstance(other, bool):  # noqa
             # multiplication with a scalar
             new_fourmomentum = FourMomentum(
-                self.px*other,
-                self.py*other,
-                self.pz*other,
-                self.E*other
-                )
+                self.px * other,
+                self.py * other,
+                self.pz * other,
+                self.E * other
+            )
             return new_fourmomentum
 
     # multiplication is commutative
@@ -60,7 +60,7 @@ class FourMomentum(object):
         """
         result = math.atanh(
             self.pz / math.sqrt(self.px**2 + self.py**2 + self.pz**2)
-            )
+        )
         return result
 
     def phi(self):
@@ -80,7 +80,7 @@ class FourMomentum(object):
         """
         return invariant mass.
         """
-        m2 = self*self
+        m2 = self * self
         if m2 >= 0:
             return math.sqrt(m2)
         else:

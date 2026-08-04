@@ -91,7 +91,7 @@ class EventBuilder:
 
             if jet.has_b_tag:
                 event.b_jets.append(jet)
-        
+
         event.met = MET(
             met_px - delta_jet_px,
             met_py - delta_jet_py,

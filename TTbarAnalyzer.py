@@ -36,11 +36,11 @@ class TTbarAnalyzer(Analyzer):
         self.attach_histogram(
             DefaultHistograms(dataset_name + "_total"),
             "total"
-            )
+        )
         self.attach_histogram(
             DefaultHistograms(dataset_name + "_trigger"),
             "trigger"
-            )
+        )
 
         # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         # Creating the class that will reconstruct the top mass
@@ -62,9 +62,9 @@ class TTbarAnalyzer(Analyzer):
 
         # add the histogram to plot the top mass
         self.attach_topmass_histogram(
-            TopMassHist(dataset_name+"_top_mass"),
+            TopMassHist(dataset_name + "_top_mass"),
             "top_mass"
-            )
+        )
 
     def process(self, event):
         """
@@ -80,7 +80,7 @@ class TTbarAnalyzer(Analyzer):
         # fill initial histogram
         self.fill_histograms(event, "total")
         # increase weighted total number of events for processed dataset
-        self.record_cut("total", event)
+        self.record_cut(event, "total")
 
         # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         # Exercise 1: Properties of ttbar quark events
@@ -96,7 +96,7 @@ class TTbarAnalyzer(Analyzer):
         # fill histograms for all events passing the trigger selection
         self.fill_histograms(event, "trigger")
         # remember to increase the selection statistics of events passing the trigger step
-        self.record_cut("trigger", event)
+        self.record_cut(event, "trigger")
 
         # Have a look at your histograms and compare the different samples.
         # Try to enrich the fraction of ttbar events by cutting on any of
@@ -124,15 +124,10 @@ class TTbarAnalyzer(Analyzer):
         # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
         # Uncomment the following part to enable the top quark reconstruction.
-        # from Calibration import mass_coordinate
-        # mass = self.TopReconstruction.calculateTopMass(
-        #     event.jets,
-        #     event.met,
-        #     event.muons[0]
-        # )
+        # mass = self.calculateTopMass(event)
 
         # if mass > 0:
-        #     event.top_mass = mass_coordinate(mass)
+        #     event.top_mass = mass
         #     self.fill_histograms(event, "top_mass")
 
         # Uncomment the lines responsible for fitting the top mass in

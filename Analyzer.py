@@ -59,7 +59,7 @@ class Analyzer:
 
     def fill_histograms(self, event, name):
         self.histograms[name].fill(event)
-    
+
     def write_output(self):
         """Write all attached histograms to a ROOT output file."""
         output_path = self.output_dir / (
@@ -90,11 +90,25 @@ class Analyzer:
             root_file.Close()
 
         print(f"Wrote output to {output_path}")
-    
-    def record_cut(self, cut_name, event):
+
+    def record_cut(self, event, cut_name):
         """Record one event passing a named selection cut."""
         self.cutflow.record(cut_name, event.weight)
-    
+
+    def calculateTopMass(self, event):
+        from Calibration import mass_coordinate
+        mT = self.TopReconstruction.calculateTopMass(
+            event.jets,
+            event.met,
+            event.muons[0]
+        )
+
+        if mT > 0:
+            mass = mass_coordinate(mT)
+        else:
+            mass = mT
+        return mass
+
     def write_cutflow(self):
         output_path = self.output_dir / (
             f"cutflow_{Path(self.file_name).stem}.csv"

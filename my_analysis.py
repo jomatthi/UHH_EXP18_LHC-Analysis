@@ -36,9 +36,11 @@ def resolve_args():
 if __name__ == "__main__":
     """
     Main analysis script. Here you run the analysis and evaluate the results.
-    You can choose the JEC variation to run, whether to include data in the analysis, and whether to skip creating PDF plots.
-    The script will print the yields of the signal and background samples before and after the cuts, and can also calculate the
-    selection efficiency and purity if the corresponding functions are implemented in SelectionMetrics.py.
+    You can choose the JEC variation to run, whether to include data in the analysis,
+    and whether to skip creating PDF plots.
+    The script will print the yields of the signal and background samples before and after the cuts,
+    and can also calculate the selection efficiency and purity if the corresponding functions are
+    implemented in SelectionMetrics.py.
     Additionally, you can fit the top mass distribution by uncommenting the relevant lines and providing the fit range.
     """
     # resolve command-line arguments
@@ -85,7 +87,7 @@ if __name__ == "__main__":
     # cut1 -> cut2 -> cut3 -> ... -> cutN
     list_of_cuts = list(analyzers['TTbar'].cutflow.cut_names())
     for i, cut in enumerate(list_of_cuts):
-        print(f"Cut {i+1}: {cut}")
+        print(f"Cut {i + 1}: {cut}")
 
     # name of the last cut in the selection chain to evaluate the yields, efficiency, and purity for
     cut_name = list_of_cuts[-1]
@@ -120,9 +122,15 @@ if __name__ == "__main__":
     print("=" * 90)
     print(f"Selection cut: {cut_name}")
     print("Signal yields:")
-    print(f"{signal_before_cuts.sumw:.3f} ± {signal_before_cuts.stat_uncertainty:.3f} -> {signal_after_cuts.sumw:.3f} ± {signal_after_cuts.stat_uncertainty:.3f}")
+    print(
+        f"{signal_before_cuts.sumw:.3f} ± {signal_before_cuts.stat_uncertainty:.3f} -> "
+        f"{signal_after_cuts.sumw:.3f} ± {signal_after_cuts.stat_uncertainty:.3f}"
+    )
     print("Background yields:")
-    print(f"{background_before_cuts.sumw:.3f} ± {background_before_cuts.stat_uncertainty:.3f} -> {background_after_cuts.sumw:.3f} ± {background_after_cuts.stat_uncertainty:.3f}")
+    print(
+        f"{background_before_cuts.sumw:.3f} ± {background_before_cuts.stat_uncertainty:.3f} -> "
+        f"{background_after_cuts.sumw:.3f} ± {background_after_cuts.stat_uncertainty:.3f}"
+    )
 
     # calculate the selection efficiency and purity
     # uncomment the following lines after implementing the efficiency and purity functions in SelectionMetrics.py
