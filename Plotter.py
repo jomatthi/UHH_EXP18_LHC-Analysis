@@ -26,8 +26,10 @@ class Plotter(object):
         self.hists_data = []
         self.hists_stack = []
         self.hists_err = []
-        if not os.path.exists('plots'):
-            os.makedirs('plots')
+        first_analyzer = list(analyzers.values())[0]
+        self.output_dir = f"{first_analyzer.output_dir}/"
+        if not os.path.exists(self.output_dir+"plots/"):
+            os.makedirs(self.output_dir+"plots/")
         # loop over all histograms
         # apply dataset specific styling and create THStack and TH1 objects
         # for plotting
@@ -61,40 +63,58 @@ class Plotter(object):
 
     def process(self):
         s = ""
-        for i in range(0, len(self.hists_stack)):
+
+        for i in range(len(self.hists_stack)):
             h = self.hists_stack[i]
             c = ROOT.TCanvas("c", "c", 800, 600)
-            if h.GetMaximum() <= 0: h.SetMaximum(1)
+
+            if h.GetMaximum() <= 0:
+                h.SetMaximum(1)
+
             h.SetMinimum(0.8)
             h.Draw("hist")
+
             h.GetXaxis().SetTitle(h.GetTitle())
             h.GetXaxis().SetTitleOffset(1.3)
             h.GetYaxis().SetTitle("Events")
             h.GetYaxis().SetTitleOffset(1.3)
-            c.Modified()
-            self.hists_err[i].Draw("E2SAME")
-            c.Modified()
-            c.BuildLegend(0.76, 0.4, 0.95, 0.95, "");
-            c.Print("plots/"+"_".join(h.GetName().split("_")[1:])+"_MC.pdf")
-            if len(self.hists_data) > 0:
-                self.hists_data[i].Draw("PESAME")
-                c.BuildLegend(0.75, 0.35, 0.95, 0.95, "");
-                c.Print("plots/"+"_".join(h.GetName().split("_")[1:])+".pdf")
 
-            old_s = s
-            s = "_".join(h.GetName().split("_")[1:])
-            s = "".join(s.split("_default")[0:1])+".pdf"
-            if (s != old_s):
-                if (i == len(self.hists_stack) - 1):
-                    c.Print(s)
-                else:
-                    c.Print(s+"(")
-                if (old_s != ""):
-                    c.Print(old_s+"]")
-            elif (i == len(self.hists_stack) - 1):
-                c.Print(s+")")
-            else:
-                c.Print(s)
+            self.hists_err[i].Draw("E2SAME")
+            c.BuildLegend(0.76, 0.4, 0.95, 0.95, "")
+
+            c.Print(
+                self.output_dir
+                + "plots/"
+                + "_".join(h.GetName().split("_")[1:])
+                + "_MC.pdf"
+            )
+
+            if i < len(self.hists_data):
+                self.hists_data[i].Draw("PESAME")
+                c.BuildLegend(0.75, 0.35, 0.95, 0.95, "")
+                c.Print(
+                    self.output_dir
+                    + "plots/"
+                    + "_".join(h.GetName().split("_")[1:])
+                    + ".pdf"
+                )
+
+            pdf_name = "_".join(h.GetName().split("_")[1:])
+            pdf_name = pdf_name.split("_default", 1)[0] + ".pdf"
+            pdf_path = self.output_dir + pdf_name
+
+            if pdf_path != s:
+                if s:
+                    c.Print(s + "]")
+
+                c.Print(pdf_path + "[")
+                s = pdf_path
+
+            c.Print(s)
+
+            if i == len(self.hists_stack) - 1:
+                c.Print(s + "]")
+
             del c
 
 

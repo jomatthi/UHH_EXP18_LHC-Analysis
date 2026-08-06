@@ -2,3 +2,8 @@
 *.pyc
 *.root
 *.pdf
+# Local instructor material
+.instructor/
+.instructor_tests/
+results/
+solutions/

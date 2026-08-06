@@ -15,6 +15,7 @@ class Fitter(object):
                 self.top_hist_MC.Add(analyzers[x].histograms['top_mass'].hists['top_mass'])  # noqa
         self.mean = 0.0
         self.unc = 0.0
+        self.output_dir = analyzers['TTbar'].output_dir
 
     def fit(self, fit_min, fit_max):
         MyStyle = ROOT.TStyle("MyStyle1", "My Root Style1")
@@ -29,21 +30,26 @@ class Fitter(object):
             fit = self.top_hist.GetFunction("gaus")
             self.mean = fit.GetParameter(1)
             self.unc = fit.GetParError(1)
-            print('\n\n------------------------------------------------------')
-            print(f'Fitted top quark mass in data: {str(self.mean)} +- {str(self.unc)} GeV\n')  # noqa
+            print(
+                "Fitted reconstructed top-mass coordinate in data: "
+                f"{self.mean:.3f} +- {self.unc:.3f} blinded units"
+            )
             print(f'With {str(self.top_hist.GetEntries())} top quark candidates')  # noqa
-            c.SaveAs("ReconstructedTopMass.pdf")
+            c.SaveAs(f"{self.output_dir}/ReconstructedTopMass_blinded.pdf")
             del c
 
-        c = ROOT.TCanvas()
-        self.top_hist_MC.Draw()
-        self.top_hist_MC.Fit("gaus", "Q", "", fit_min, fit_max)
-        fit = self.top_hist_MC.GetFunction("gaus")
-        self.mean = fit.GetParameter(1)
-        self.unc = fit.GetParError(1)
-        print('\n\n------------------------------------------------------')
-        print(f'Fitted top quark mass in Monte Carlo: {str(self.mean)} +- {str(self.unc)} GeV\n')  # noqa
-        print(f'With {str(self.top_hist_MC.GetEntries())} top quark candidates')  # noqa
-        c.SaveAs("ReconstructedTopMass_MC.pdf")
-        del c
-        return self.top_hist_MC
+        # c = ROOT.TCanvas()
+        # self.top_hist_MC.Draw()
+        # self.top_hist_MC.Fit("gaus", "Q", "", fit_min, fit_max)
+        # fit = self.top_hist_MC.GetFunction("gaus")
+        # self.mean = fit.GetParameter(1)
+        # self.unc = fit.GetParError(1)
+        # print('\n\n------------------------------------------------------')
+        # print(
+        #     "Fitted reconstructed top-mass coordinate in MC: "
+        #     f"{self.mean:.3f} +- {self.unc:.3f} blinded units"
+        # )
+        # print(f'With {str(self.top_hist_MC.GetEntries())} top quark candidates')  # noqa
+        # c.SaveAs(f"{self.output_dir}/ReconstructedTopMass_blinded_MC.pdf")
+        # del c
+        return self.top_hist

@@ -56,7 +56,7 @@ class TopReco:
                 met.py,
                 solutions[sol],
                 math.sqrt(met.pt()**2 + solutions[sol]**2)
-                )
+            )
             # Looping over all jets as possible leptonic top candidates.
             for x in range(len(jets)):
                 # If there are two B-jets we want the leptonic top to have one

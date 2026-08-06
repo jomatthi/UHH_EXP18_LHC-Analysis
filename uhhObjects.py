@@ -13,7 +13,7 @@ class Muon(FourMomentum):
 
 class Jet(FourMomentum):
     """A jet.
-    Holds the muon four momentum
+    Holds the jet four momentum
     """
     def __init__(self, px=0, py=0, pz=0, E=0):
         super(Jet, self).__init__(px, py, pz, E)
